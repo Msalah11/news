@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\News;
+use App\Repositories\Eloquent\EloquentNewsRepository;
+use App\Repositories\Interfaces\NewsRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -23,6 +26,8 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->app->bind(NewsRepository::class, function () {
+            return new EloquentNewsRepository( new News() );
+        });
     }
 }
