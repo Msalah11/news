@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\NewsAction;
 use App\Http\Requests\IndexNews;
 use App\Http\Requests\StoreNews;
+use App\Http\Requests\UpdateNews;
 use App\Http\Resources\NewsResource;
 use App\Traits\HttpResponse;
 use Illuminate\Http\JsonResponse;
@@ -63,6 +64,38 @@ class NewsController extends Controller
         return $this->sendSuccess(
             new NewsResource($item),
             __('Item Stored Successfully')
+        );
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param $id
+     * @param UpdateNews $request
+     * @return JsonResponse|void
+     */
+    public function update($id, UpdateNews $request)
+    {
+        $sanitized = $request->validated();
+        $item = $this->newsAction->findNews($id);
+
+        if(empty($item)) {
+            return $this->sendError(
+                __('The item you are looking for does not exist'),
+                404
+            );
+        }
+
+        if($item->user_id != $request->user()->id) {
+            return $this->sendError(
+                __("You don't have permission to perform this action"),
+                401
+            );
+        }
+
+        return $this->sendSuccess(
+            $this->newsAction->edit($sanitized, $id),
+            __('News item updated successfully')
         );
     }
 }

@@ -31,4 +31,14 @@ class NewsAction
     {
         return $this->newsRepository->create($data);
     }
+
+    public function edit($data, $id)
+    {
+        return $this->newsRepository->update($data, ['id' => $id]);
+    }
+
+    public function findNews($id)
+    {
+        return $this->newsRepository->find($id, ['user']);
+    }
 }
