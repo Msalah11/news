@@ -107,11 +107,12 @@ abstract class EloquentBaseRepository implements BaseRepository
 
     public function bulkDelete(array $ids): ?bool
     {
-        DB::transaction(static function () use ($ids) {
+        $that = $this;
+        return DB::transaction(static function () use ($ids, $that) {
             collect($ids)
                 ->chunk(1000)
-                ->each(static function ($bulkChunk) {
-                    $this->model->whereIn('id', $bulkChunk)->delete();
+                ->each(static function ($bulkChunk) use ($that) {
+                    $that->model->whereIn('id', $bulkChunk)->delete();
                 });
         });
     }

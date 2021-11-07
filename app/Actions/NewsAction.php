@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Repositories\Interfaces\NewsRepository;
+use Carbon\Carbon;
 
 class NewsAction
 {
@@ -40,6 +41,19 @@ class NewsAction
     public function delete($id)
     {
         return $this->newsRepository->delete(['id' => $id]);
+    }
+
+    public function deleteByDate($period): ?bool
+    {
+       $items = $this->newsRepository->all(['id'], [], function($q) use ($period) {
+           return $q->where('created_at', '<=', Carbon::now()->subDays($period)->toDateTimeString());
+       })->pluck('id')->toArray();
+
+       if(!empty($items)) {
+           return $this->newsRepository->bulkDelete($items);
+       }
+
+       return false;
     }
 
     public function findNews($id)

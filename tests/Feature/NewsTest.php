@@ -22,9 +22,9 @@ class NewsTest extends TestCase
 
     public function testFilterNewsByUserIdSuccessfully()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->has(News::factory()->count(10))->create();
 
-        $this->actingAs($user)->get('api/news?user_id=1')
+        $this->actingAs($user)->get('api/news?user_id=' . $user->id)
             ->assertStatus(Response::HTTP_OK)
             ->assertJsonStructure($this->newsListJsonStructure());
     }
