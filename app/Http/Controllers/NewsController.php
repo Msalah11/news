@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\NewsAction;
+use App\Events\NewsCreated;
 use App\Http\Requests\IndexNews;
 use App\Http\Requests\StoreNews;
 use App\Http\Requests\UpdateNews;
@@ -60,6 +61,8 @@ class NewsController extends Controller
         if(empty($item)) {
             return $this->sendError(__('Item Store Failed'));
         }
+
+        event(new NewsCreated($item));
 
         return $this->sendSuccess(
             new NewsResource($item),

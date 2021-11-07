@@ -18,11 +18,6 @@ cp .env.example .env
 Create a `database.sqlite` file in the `database` folder, replace the database environment variables
 ```
 DB_CONNECTION=sqlite
-DB_HOST=null
-DB_PORT=null
-DB_DATABASE=database/database.sqlite
-DB_USERNAME=null
-DB_PASSWORD=null
 ```
 Now generate the Laravel application key for this project with:
 ```
