@@ -26,4 +26,9 @@ class NewsAction
 
         return $this->newsRepository->paginate(30, ['*'], $withRelation, $conditions, $orderBy);
     }
+
+    public function create($data)
+    {
+        return $this->newsRepository->create($data);
+    }
 }
