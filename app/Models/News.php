@@ -20,6 +20,17 @@ class News extends Model
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'user_id' => 'integer',
+        'title' => 'string',
+        'content' => 'string'
+    ];
+
+    /**
      * A news post has one user.
      *
      * @return BelongsTo

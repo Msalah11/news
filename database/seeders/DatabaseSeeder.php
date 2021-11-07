@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
     {
         \App\Models\User::factory(10)
             ->has(News::factory()->count(10))
-            ->create();
+            ->create()->each(function ($user) {
+                $user->createToken('SduiToken')->plainTextToken;
+            });
     }
 }
