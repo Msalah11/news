@@ -37,6 +37,11 @@ class NewsAction
         return $this->newsRepository->update($data, ['id' => $id]);
     }
 
+    public function delete($id)
+    {
+        return $this->newsRepository->delete(['id' => $id]);
+    }
+
     public function findNews($id)
     {
         return $this->newsRepository->find($id, ['user']);

@@ -98,4 +98,28 @@ class NewsController extends Controller
             __('News item updated successfully')
         );
     }
+
+    public function destroy($id)
+    {
+        $item = $this->newsAction->findNews($id);
+
+        if(empty($item)) {
+            return $this->sendError(
+                __('The item you are looking for does not exist'),
+                404
+            );
+        }
+
+        if($item->user_id != request()->user()->id) {
+            return $this->sendError(
+                __("You don't have permission to perform this action"),
+                401
+            );
+        }
+
+        return $this->sendSuccess(
+            $this->newsAction->delete($id),
+            __('News item Deleted successfully')
+        );
+    }
 }
