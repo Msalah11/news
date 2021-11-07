@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Repositories\Interfaces\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 abstract class EloquentBaseRepository implements BaseRepository
 {
@@ -79,9 +80,40 @@ abstract class EloquentBaseRepository implements BaseRepository
         return $query->paginate($perPage, $columns);
     }
 
+    /**
+     * @param array|string[] $columns
+     * @param array|null $with
+     * @param null $modifyQuery
+     * @param array|null $order
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function all(array $columns = ['*'], ?array $with = null, $modifyQuery = null, array $order = null)
+    {
+        $query = $this->model->newQuery();
+
+        $this->processQuery($query, $with, $order);
+
+        if (!is_null($modifyQuery)) {
+            is_array($modifyQuery) ? $query = $query->where($modifyQuery) : $modifyQuery($query);
+        }
+
+        return $query->get($columns);
+    }
+
     public function delete(array $conditions): ?bool
     {
         return $this->model->where($conditions)->delete();
+    }
+
+    public function bulkDelete(array $ids): ?bool
+    {
+        DB::transaction(static function () use ($ids) {
+            collect($ids)
+                ->chunk(1000)
+                ->each(static function ($bulkChunk) {
+                    $this->model->whereIn('id', $bulkChunk)->delete();
+                });
+        });
     }
 
     protected function processQuery($query, $with = null, $order = null)

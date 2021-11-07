@@ -43,6 +43,22 @@ interface BaseRepository
     public function paginate(int $perPage = 15, array $columns = ['*'], ?array $with = null, $modifyQuery = null, array $order = null): LengthAwarePaginator;
 
     /**
+     * @param array $columns
+     * @param array|null $with
+     * @param null $modifyQuery
+     * @param array|null $order
+     */
+    public function all(array $columns = ['*'], ?array $with = null, $modifyQuery = null, array $order = null);
+
+
+    /**
+     * @param array $ids
+     *
+     * @return bool|null
+     */
+    public function bulkDelete(array $ids): ?bool;
+
+    /**
      * @param array $conditions
      *
      * @return bool|null
