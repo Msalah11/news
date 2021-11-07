@@ -24,6 +24,6 @@ class NewsAction
         $withRelation = ['user'];
         $orderBy = ['id' => 'DESC'];
 
-        return $this->newsRepository->paginate(1, ['*'], $withRelation, $conditions, $orderBy);
+        return $this->newsRepository->paginate(30, ['*'], $withRelation, $conditions, $orderBy);
     }
 }
