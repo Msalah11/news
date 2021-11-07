@@ -70,6 +70,15 @@ class NewsTest extends TestCase
             ->assertJsonStructure(['response', 'message']);
     }
 
+    public function testDeleteNews()
+    {
+        $user = User::factory()->has(News::factory()->count(1))->create();
+        $newsId = $user->news->first()->id;
+
+        $this->actingAs($user)->delete("api/news/$newsId")
+            ->assertStatus(Response::HTTP_NO_CONTENT);
+    }
+
     private function newsCreateJsonStructure(): array
     {
         return [

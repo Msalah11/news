@@ -119,7 +119,8 @@ class NewsController extends Controller
 
         return $this->sendSuccess(
             $this->newsAction->delete($id),
-            __('News item Deleted successfully')
+            __('News item Deleted successfully'),
+            204
         );
     }
 }
