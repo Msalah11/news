@@ -55,6 +55,21 @@ class NewsTest extends TestCase
             ]);
     }
 
+    public function testNewsUpdatedSuccessfully()
+    {
+        $user = User::factory()->has(News::factory()->count(1))->create();
+        $newsId = $user->news->first()->id;
+
+        $payload = [
+            'title' => 'NFTs Take Over NYC',
+            'content' => 'It’s hard to find words to describe the crypto phenomenon that New York is witnessing right now'
+        ];
+
+        $this->actingAs($user)->put("api/news/$newsId", $payload)
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJsonStructure(['response', 'message']);
+    }
+
     private function newsCreateJsonStructure(): array
     {
         return [
