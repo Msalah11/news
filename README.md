@@ -1,7 +1,7 @@
 ## Installation
 To begin, run the following command to download the project using Git:
 ```
-git clone https://github.com/Msalah11/news.git
+git clone https://github.com/Msalah11/laravel-repository-pattern.git
 ```
 Next, move into the new project’s folder and install all its dependencies:
 ```
